@@ -43,3 +43,107 @@ __2020/08/19 周三 （23:58~23:59） 心情：紧迫感__
 	```
 ## 感想
 时间不够。
+
+***
+
+__2020/08/22 周六 （23:58~23:59） 心情：紧迫感__
+## 总结
+* 复习链表并实践  
+	···C++
+	//节点的定义
+	struct ListNode {
+		int val;
+		ListNode *pNext;
+		ListNode(){}
+		ListNode(int x, ListNode *nextNode):val(x), pNext(nextNode){}
+	};
+
+	//链表节点的定义与接口
+	class linkList {
+	public:
+		//默认构造函数
+		linkList(){
+			firstNode = NULL;
+			listSize = 0;
+		}
+		//拷贝构造函数
+		linkList(const linkList &theList){
+			this->listSize = theList.listSize;
+			if(theList.listSize == 0) {
+				firstNode = NULL;
+				return ;
+			}
+			
+			//源链表节点的头结点
+			ListNode *srcNode = theList.firstNode;
+			//本链表头结点使用源节点头结点值
+			firstNode = new ListNode(srcNode->val);
+
+			//本链表节点头结点
+			ListNode *targetNode = firstNode;
+			//源链表节点后移一个节点
+			srcNode = srcNode->pNext;
+			
+			while (srcNode->pNext != NULL) {
+				//本节点的后一个节点以源节点复制
+				targetNode->pNext = new ListNode(srcNode->val);
+				//源节点节点后移一个节点
+				targetNode = targetNode->pNext;
+				//本节点后移一个节点
+				srcNode = srcNode->pNext;
+			}
+			targetNode->pNext = NULL;
+		}
+
+		~linkList(){
+			while(firstNode != NULL) {
+				ListNode* nextNode = firstNode->pNext;
+				delete firstNode;
+				firstNode = nextNode;
+			}
+		}
+
+	public:
+		//获得索引为index的val
+		int getIndexof(int index) {
+			if((index<0) || (index>this->listSize)) {
+				return -1;
+			}
+			ListNode *curNode = firstNode;
+			for(int i=0; i<index; i++) {
+				curNode = curNode->pNext;
+			}
+			return curNode->val;
+		}
+		//在索引为index的位置插入val
+		bool insert(int index, int val) {
+			bool ret = false;
+			if((index<0) || (index>this->listSize)) {
+				return ret;
+			}
+
+			if(index == 0) {
+				//链表头插
+				firstNode = new ListNode(val, firstNode);
+			}
+			else {
+				ListNode *curNode = firstNode;
+				//"-1"的原因是因为要插入元素位置在index上，所以要在index前一个节点操作
+				for(int i=0; i<index-1; i++) {
+					curNode = curNode->pNext;
+				}
+				//节点的构造函数会将当前节点的下一个节点重新分配给新分配出来节点的next指针
+				curNode = new ListNode(val, curNode->pNext);
+			}
+			listSize++;
+		}
+
+	private:
+		ListNode *firstNode;
+		int listSize;
+	};		
+	···
+## 感想
+朋友来访，耽误了一些时间。刷题300，任到重远。	
+
+
